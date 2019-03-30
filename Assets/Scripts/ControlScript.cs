@@ -16,9 +16,16 @@ public class ControlScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButton("Fire1"))
+    
+        if (Input.GetButton("Up"))
         {
             transform.position = transform.position + Camera.main.transform.forward * visitorSpeed * Time.deltaTime;
         }
+
+        if (Input.GetButton("Down"))
+        {
+            transform.position = transform.position - Camera.main.transform.forward * visitorSpeed * Time.deltaTime;
+        }
+    
     }
 }

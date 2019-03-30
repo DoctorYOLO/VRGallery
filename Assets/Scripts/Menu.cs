@@ -37,7 +37,6 @@ public class Menu : MonoBehaviour
     public void BackClick()
     {
         MainMenu.gameObject.SetActive(true);
-        Gallery.gameObject.SetActive(false);
         AddImage.gameObject.SetActive(false);
     }
 
