@@ -4,5 +4,5 @@ using UnityEngine;
 
 static class Store
 {
-    public static int pictureId;
+    public static string pictureName;
 }

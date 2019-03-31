@@ -17,12 +17,12 @@ public class ControlScript : MonoBehaviour
     void Update()
     {
     
-        if (Input.GetButton("Up"))
+        if (Input.GetButton("Vertical"))
         {
             transform.position = transform.position + Camera.main.transform.forward * visitorSpeed * Time.deltaTime;
         }
 
-        if (Input.GetButton("Down"))
+        if (Input.GetButton("Horizontal"))
         {
             transform.position = transform.position - Camera.main.transform.forward * visitorSpeed * Time.deltaTime;
         }

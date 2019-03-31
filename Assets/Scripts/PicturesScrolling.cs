@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -33,6 +34,7 @@ public class PicturesScrolling : MonoBehaviour
             panPrefab.GetComponent<Image>().sprite = pictures[i];
             panPrefab.name = pictures[i].name;
             instPans[i] = Instantiate(panPrefab, transform, false);
+            instPans[i].name = panPrefab.name;
             instPans[i].GetComponent<Button>().onClick.AddListener(delegate { PictureClick(selectedPanID); });
             if (i == 0) continue;
             instPans[i].transform.localPosition = new Vector2(instPans[i - 1].transform.localPosition.x + panPrefab.GetComponent<RectTransform>().sizeDelta.x + panOffset, instPans[i].transform.localPosition.y);
@@ -80,7 +82,8 @@ public class PicturesScrolling : MonoBehaviour
 
     public void PictureClick(int id)
     {
-        Store.pictureId = id;
+        Store.pictureName = instPans[id].name;
+        XRSettings.enabled = true;
         SceneManager.LoadScene("VR");
     }
 
