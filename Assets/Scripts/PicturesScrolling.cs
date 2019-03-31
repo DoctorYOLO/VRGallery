@@ -8,6 +8,8 @@ public class PicturesScrolling : MonoBehaviour
 {
     public GameObject panPrefab;
     public int panOffset;
+
+    [Range (0f, 20f)]
     public float snapSpeed;
 
     private Sprite[] pictures;
@@ -29,10 +31,12 @@ public class PicturesScrolling : MonoBehaviour
         for (int i = 0; i < pictures.Length; i++)
         {
             panPrefab.GetComponent<Image>().sprite = pictures[i];
+            panPrefab.name = pictures[i].name;
             instPans[i] = Instantiate(panPrefab, transform, false);
+            instPans[i].GetComponent<Button>().onClick.AddListener(delegate { PictureClick(selectedPanID); });
             if (i == 0) continue;
             instPans[i].transform.localPosition = new Vector2(instPans[i - 1].transform.localPosition.x + panPrefab.GetComponent<RectTransform>().sizeDelta.x + panOffset, instPans[i].transform.localPosition.y);
-            pansPos[i] = -instPans[i].transform.localPosition;
+            pansPos[i] = -instPans[i].transform.localPosition; 
         }
     }
 
@@ -72,6 +76,12 @@ public class PicturesScrolling : MonoBehaviour
     public void LeftClick()
     {
 
+    }
+
+    public void PictureClick(int id)
+    {
+        Store.pictureId = id;
+        SceneManager.LoadScene("VR");
     }
 
     public void BackClick()
