@@ -31,23 +31,25 @@ public class PicturesScrolling : MonoBehaviour
         pansPos = new Vector2[pictures.Length];
         for (int i = 0; i < pictures.Length; i++)
         {
-            panPrefab.GetComponent<Image>().sprite = pictures[i];
+            panPrefab.GetComponentInChildren<Image>().GetComponent<Image>().sprite = pictures[i];
+            panPrefab.GetComponentInChildren<Text>().text = pictures[i].name;
             panPrefab.name = pictures[i].name;
             instPans[i] = Instantiate(panPrefab, transform, false);
             instPans[i].name = panPrefab.name;
-            instPans[i].GetComponent<Button>().onClick.AddListener(delegate { PictureClick(selectedPanID); });
+            instPans[i].GetComponentInChildren<Button>().onClick.AddListener(delegate { PictureClick(selectedPanID); });
             if (i == 0) continue;
-            instPans[i].transform.localPosition = new Vector2(instPans[i - 1].transform.localPosition.x + panPrefab.GetComponent<RectTransform>().sizeDelta.x + panOffset, instPans[i].transform.localPosition.y);
-            pansPos[i] = -instPans[i].transform.localPosition; 
+            instPans[i].transform.localPosition = new Vector2(instPans[i].transform.localPosition.x, instPans[i - 1].transform.localPosition.y - panPrefab.GetComponent<RectTransform>().localPosition.y + panOffset);
+            pansPos[i] = instPans[i].transform.localPosition; 
         }
     }
 
     void FixedUpdate()
     {
+        /*
         float nearestPos = float.MaxValue;
         for (int i = 0; i < pictures.Length; i++)
         {
-            float distance = Mathf.Abs(contentRect.anchoredPosition.x - pansPos[i].x);
+            float distance = Mathf.Abs(contentRect.anchoredPosition.y - pansPos[i].y);
             if (distance < nearestPos)
             {
                 nearestPos = distance;
@@ -55,8 +57,9 @@ public class PicturesScrolling : MonoBehaviour
             }
         }
         if (isScrolling) return;
-        contentVector.x = Mathf.SmoothStep(contentRect.anchoredPosition.x, pansPos[selectedPanID].x, snapSpeed * Time.fixedDeltaTime);
+        contentVector.y = Mathf.SmoothStep(contentRect.anchoredPosition.y, pansPos[selectedPanID].y, snapSpeed * Time.fixedDeltaTime);
         contentRect.anchoredPosition = contentVector;
+        */
     }
 
     // Update is called once per frame
