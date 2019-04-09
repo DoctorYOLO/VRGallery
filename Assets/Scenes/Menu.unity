@@ -344,7 +344,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u0412\u043E\u0439\u0442\u0438"
+  m_Text: "\u0412\u044B\u0431\u0440\u0430\u0442\u044C \u043A\u0430\u0440\u0442\u0438\u043D\u0443"
 --- !u!222 &259739487
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1031,9 +1031,9 @@ MonoBehaviour:
   m_Content: {fileID: 1439859707}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 0
+  m_MovementType: 1
   m_Elasticity: 0.1
-  m_Inertia: 0
+  m_Inertia: 1
   m_DecelerationRate: 0.135
   m_ScrollSensitivity: 1
   m_Viewport: {fileID: 763949832}
@@ -1174,7 +1174,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -1448,10 +1448,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 174d7602a76c7e24790748eb39260096, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panPrefab: {fileID: 3356756393058933855, guid: b9521bc70e15fa447b53274b24eff9b2,
+  panPrefab: {fileID: 3697898639211937460, guid: 0c1ff9bf4663c7a4484cc8dad51e411c,
     type: 3}
   panOffset: 0
   snapSpeed: 8
+  ResultsPerPage: 1000
 --- !u!1 &1523695123
 GameObject:
   m_ObjectHideFlags: 0
