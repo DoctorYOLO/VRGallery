@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityGoogleDrive;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
@@ -14,16 +15,12 @@ public class PicturesScrolling : MonoBehaviour
     [Header("Container for pans in scroll view")]
     public RectTransform content;
 
-    //public Image testImage;
-
     [Header ("Google Drive API")]
     [Range(1, 1000)]
     public int ResultsPerPage = 100;
     private GoogleDriveFiles.DownloadTextureRequest requestTexture;
     private GoogleDriveFiles.ListRequest request;
     private string query = string.Empty;
-    private Sprite thumbnailPicture;
-
 
     // Start is called before the first frame update
     void Start()
@@ -54,8 +51,6 @@ public class PicturesScrolling : MonoBehaviour
     // Drawing list from Google Drive in menu UI
     private void BuildResults (UnityGoogleDrive.Data.FileList fileList)
     {
-        int panCount = fileList.Files.Count;
-
         foreach (var file in fileList.Files)
         {
             var instance = GameObject.Instantiate(panPrefab.gameObject) as GameObject;
@@ -65,16 +60,15 @@ public class PicturesScrolling : MonoBehaviour
     }
 
     // Write data using TestItemView
-    private void InitializePanView(GameObject viewPrefab, UnityGoogleDrive.Data.File file)
+    private async void InitializePanView(GameObject viewPrefab, UnityGoogleDrive.Data.File file)
     {
         TestItemView view = new TestItemView(viewPrefab.transform);
         view.titleText.text = file.Name;
-        StartCoroutine(DownloadThumbnail(file.ThumbnailLink));
-        view.imageThumbnail.sprite = thumbnailPicture;
+        view.imageThumbnail.sprite = await DownloadThumbnail(file.ThumbnailLink);
         view.downloadButton.GetComponent<Button>().onClick.AddListener(
             () =>
             {
-                DownloadTexture(file.Id);
+                //DownloadTexture(file.Id);
             }
         );
     }
@@ -104,13 +98,20 @@ public class PicturesScrolling : MonoBehaviour
     }
 
     // Download thumbnail from URL
-    private IEnumerator DownloadThumbnail(string id)
+    private async Task<Sprite> DownloadThumbnail(string id)
     {
-        var www = UnityWebRequestTexture.GetTexture(id);
-        yield return www.SendWebRequest();
-        var texture = DownloadHandlerTexture.GetContent(www);
-        var rect = new Rect(0, 0, texture.width, texture.height);
-        thumbnailPicture = Sprite.Create(texture, rect, Vector2.one * .5f);
+        using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(id))
+        {
+            var asyncOp = www.SendWebRequest();
+            while (asyncOp.isDone == false)
+            {
+                await Task.Delay(1000 / 30);
+            }
+            var texture = DownloadHandlerTexture.GetContent(www);
+            var rect = new Rect(0, 0, texture.width, texture.height);
+            return Sprite.Create(texture, rect, Vector2.one * .5f);
+        }
+
     }
 
     // Download texture from Google Drive
