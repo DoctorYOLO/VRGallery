@@ -4,6 +4,6 @@ using UnityEngine;
 
 static class Store
 {
-    public static string pictureName;
+    public static string folderId;
     public static Sprite vrPicture;
 }

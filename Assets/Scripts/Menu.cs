@@ -2,18 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
+    [Header("App screens")]
     public GameObject MainMenu;
-    public GameObject AddImage;
+    public GameObject Settings;
     public GameObject Gallery;
+
+    [Header("Settings screen")]
+    public GameObject IdField;
+    private string folderId = "1-NymqviIpcoKleDdG1OPkadwhAwCPZhn";
 
     // Start is called before the first frame update
     void Start()
     {
         XRSettings.enabled = false;
+        if (Store.folderId == null)
+        {
+            IdField.GetComponentInChildren<InputField>().text = folderId;
+            Store.folderId = folderId;
+        }
+        else
+        {
+            IdField.GetComponentInChildren<InputField>().text = Store.folderId;
+        }
     }
 
     // Update is called once per frame
@@ -31,18 +46,18 @@ public class Menu : MonoBehaviour
     public void SettingsClick()
     {
         MainMenu.gameObject.SetActive(false);
-        AddImage.gameObject.SetActive(true);
+        Settings.gameObject.SetActive(true);
     }
 
     public void BackClick()
     {
-        MainMenu.gameObject.SetActive(true);
-        AddImage.gameObject.SetActive(false);
+        SceneManager.LoadScene("Menu");
     }
 
-    public void StartVR()
+    public void SaveClick()
     {
-        XRSettings.enabled = true;
-        SceneManager.LoadScene("VR");
+        Store.folderId = IdField.GetComponentInChildren<InputField>().text;
+        MainMenu.gameObject.SetActive(true);
+        Settings.gameObject.SetActive(false);
     }
 }

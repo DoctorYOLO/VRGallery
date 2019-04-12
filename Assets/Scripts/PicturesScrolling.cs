@@ -37,14 +37,13 @@ public class PicturesScrolling : MonoBehaviour
         
     }
 
-
     // Request list of files from Google Drive
     private void ListFiles (string nextPageToken = null)
     {
         request = GoogleDriveFiles.List();
         request.Fields = new List<string> { "nextPageToken, files(id, name, thumbnailLink)" };
         request.PageSize = ResultsPerPage;
-        request.Q = "mimeType contains 'image' and '1-NymqviIpcoKleDdG1OPkadwhAwCPZhn' in parents";
+        request.Q = "mimeType contains 'image' and '" + Store.folderId + "' in parents";
         if (!string.IsNullOrEmpty(query))
             request.Q = string.Format("name contains '{0}'", query);
         if (!string.IsNullOrEmpty(nextPageToken))
@@ -72,7 +71,7 @@ public class PicturesScrolling : MonoBehaviour
         view.titleText.text = file.Name;
         StartCoroutine(DownloadThumbnail(file.ThumbnailLink));
         view.imageThumbnail.sprite = thumbnailPicture;
-        view.downloadButton.onClick.AddListener(
+        view.downloadButton.GetComponent<Button>().onClick.AddListener(
             () =>
             {
                 DownloadTexture(file.Id);
@@ -85,14 +84,14 @@ public class PicturesScrolling : MonoBehaviour
     {
         public Text titleText;
         public Image imageThumbnail;
-        public Button downloadButton;
+        public Transform downloadButton;
         public Button startButton;
 
         public TestItemView(Transform rootView)
         {
             titleText = rootView.Find("TitleText").GetComponent<Text>();
             imageThumbnail = rootView.Find("Thumbnail").GetComponent<Image>();
-            downloadButton = rootView.Find("DownloadButton").GetComponent<Button>();
+            downloadButton = rootView.Find("DownloadButton");
             //startButton = rootView.Find("StartButton").GetComponent<Button>();
         }
     }
@@ -107,7 +106,6 @@ public class PicturesScrolling : MonoBehaviour
     // Download thumbnail from URL
     private IEnumerator DownloadThumbnail(string id)
     {
-        Debug.Log("1");
         var www = UnityWebRequestTexture.GetTexture(id);
         yield return www.SendWebRequest();
         var texture = DownloadHandlerTexture.GetContent(www);
@@ -128,7 +126,6 @@ public class PicturesScrolling : MonoBehaviour
         var texture = textureFile.Texture;
         var rect = new Rect(0, 0, texture.width, texture.height);
         Store.vrPicture = Sprite.Create(texture, rect, Vector2.one * .5f);
-        StartClick();
     }
 
     public void StartClick()
