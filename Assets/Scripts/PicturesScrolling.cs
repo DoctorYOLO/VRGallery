@@ -68,7 +68,15 @@ public class PicturesScrolling : MonoBehaviour
         view.downloadButton.GetComponent<Button>().onClick.AddListener(
             () =>
             {
-                //DownloadTexture(file.Id);
+                //view.downloadButton.transform.gameObject.SetActive(false);
+                //view.progressBar.transform.gameObject.SetActive(true);
+                DownloadTexture(file.Id);
+            }
+        );
+        view.startButton.GetComponent<Button>().onClick.AddListener(
+            () =>
+            {
+                StartClick();
             }
         );
     }
@@ -78,15 +86,17 @@ public class PicturesScrolling : MonoBehaviour
     {
         public Text titleText;
         public Image imageThumbnail;
+        public Image progressBar;
         public Transform downloadButton;
-        public Button startButton;
+        public Transform startButton;
 
         public TestItemView(Transform rootView)
         {
             titleText = rootView.Find("TitleText").GetComponent<Text>();
             imageThumbnail = rootView.Find("Thumbnail").GetComponent<Image>();
             downloadButton = rootView.Find("DownloadButton");
-            //startButton = rootView.Find("StartButton").GetComponent<Button>();
+            startButton = rootView.Find("StartButton");
+            progressBar = rootView.Find("ProgressBar").GetComponent<Image>();
         }
     }
 
@@ -127,6 +137,7 @@ public class PicturesScrolling : MonoBehaviour
         var texture = textureFile.Texture;
         var rect = new Rect(0, 0, texture.width, texture.height);
         Store.vrPicture = Sprite.Create(texture, rect, Vector2.one * .5f);
+        StartClick();
     }
 
     public void StartClick()
