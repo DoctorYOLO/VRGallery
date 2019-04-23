@@ -7,6 +7,9 @@ public class ControlScript : MonoBehaviour
 
     public int visitorSpeed;
 
+    private bool isMoving = false;
+    private bool moveForward = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,16 +19,38 @@ public class ControlScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (isMoving)
+        {
+            if (moveForward)
+            {
+                transform.position = transform.position + Camera.main.transform.forward * visitorSpeed * Time.deltaTime;
+            }
+            if (!moveForward)
+            {
+                transform.position = transform.position - Camera.main.transform.forward * visitorSpeed * Time.deltaTime;
+            }
+        }
     }
 
-    public void MoveForward ()
+    public void MoveForwardUp ()
     {
-        transform.position = transform.position + Camera.main.transform.forward * visitorSpeed * Time.deltaTime;
+        isMoving = false;
     }
 
-    public void MoveBackward ()
+    public void MoveForwardDown()
     {
-        transform.position = transform.position - Camera.main.transform.forward * visitorSpeed * Time.deltaTime;
+        isMoving = true;
+        moveForward = true;
+    }
+
+    public void MoveBackwardUp ()
+    {
+        isMoving = false;
+    }
+
+    public void MoveBackwardDown()
+    {
+        isMoving = true;
+        moveForward = false;
     }
 }
