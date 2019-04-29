@@ -15,23 +15,38 @@ public class PicturesScrolling : MonoBehaviour
     [Header("Container for pans in scroll view")]
     public RectTransform content;
 
+    [Header("Loading circle")]
+    public GameObject loadingWindow;
+    public RectTransform loadingTransform;
+    private float rotateSpeed = -100f;
+
     [Header ("Google Drive API")]
     [Range(1, 1000)]
     public int ResultsPerPage = 100;
     private GoogleDriveFiles.DownloadTextureRequest requestTexture;
     private GoogleDriveFiles.ListRequest request;
     private string query = string.Empty;
+    private bool isDownloadind = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        //loadingTransform = GetComponent();
         ListFiles();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (isDownloadind)
+        {
+            loadingWindow.gameObject.SetActive(true);
+            loadingTransform.Rotate(0f, 0f, rotateSpeed * Time.deltaTime);
+        }
+        if (!isDownloadind)
+        {
+            loadingWindow.gameObject.SetActive(false);
+        }
     }
 
     // Request list of files from Google Drive
@@ -71,6 +86,7 @@ public class PicturesScrolling : MonoBehaviour
                 //view.downloadButton.transform.gameObject.SetActive(false);
                 //view.progressBar.transform.gameObject.SetActive(true);
                 DownloadTexture(file.Id);
+                view.startButton.transform.gameObject.SetActive(true);
             }
         );
         view.startButton.GetComponent<Button>().onClick.AddListener(
@@ -127,6 +143,7 @@ public class PicturesScrolling : MonoBehaviour
     // Download texture from Google Drive
     private void DownloadTexture(string id)
     {
+        isDownloadind = true;
         requestTexture = GoogleDriveFiles.DownloadTexture(id, true);
         requestTexture.Send().OnDone += RenderImage;
     }
@@ -137,7 +154,8 @@ public class PicturesScrolling : MonoBehaviour
         var texture = textureFile.Texture;
         var rect = new Rect(0, 0, texture.width, texture.height);
         Store.vrPicture = Sprite.Create(texture, rect, Vector2.one * .5f);
-        StartClick();
+        isDownloadind = false;
+        //StartClick();
     }
 
     public void StartClick()
