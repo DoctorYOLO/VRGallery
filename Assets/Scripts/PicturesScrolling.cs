@@ -26,7 +26,7 @@ public class PicturesScrolling : MonoBehaviour
     private GoogleDriveFiles.DownloadTextureRequest requestTexture;
     private GoogleDriveFiles.ListRequest request;
     private string query = string.Empty;
-    private bool isDownloadind = false;
+    private int isDownloadind = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -38,14 +38,16 @@ public class PicturesScrolling : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isDownloadind)
+        if (isDownloadind == 1)
         {
             loadingWindow.gameObject.SetActive(true);
             loadingTransform.Rotate(0f, 0f, rotateSpeed * Time.deltaTime);
         }
-        if (!isDownloadind)
+        if (isDownloadind == 2)
         {
-            loadingWindow.gameObject.SetActive(false);
+            //loadingWindow.gameObject.SetActive(false);
+            loadingWindow.transform.Find("LoadingCircle").transform.gameObject.SetActive(false);
+            loadingWindow.transform.Find("StartButton").transform.gameObject.SetActive(true);
         }
     }
 
@@ -86,13 +88,6 @@ public class PicturesScrolling : MonoBehaviour
                 //view.downloadButton.transform.gameObject.SetActive(false);
                 //view.progressBar.transform.gameObject.SetActive(true);
                 DownloadTexture(file.Id);
-                view.startButton.transform.gameObject.SetActive(true);
-            }
-        );
-        view.startButton.GetComponent<Button>().onClick.AddListener(
-            () =>
-            {
-                StartClick();
             }
         );
     }
@@ -104,15 +99,12 @@ public class PicturesScrolling : MonoBehaviour
         public Image imageThumbnail;
         public Image progressBar;
         public Transform downloadButton;
-        public Transform startButton;
 
         public TestItemView(Transform rootView)
         {
             titleText = rootView.Find("TitleText").GetComponent<Text>();
             imageThumbnail = rootView.Find("Thumbnail").GetComponent<Image>();
             downloadButton = rootView.Find("DownloadButton");
-            startButton = rootView.Find("StartButton");
-            progressBar = rootView.Find("ProgressBar").GetComponent<Image>();
         }
     }
 
@@ -143,7 +135,7 @@ public class PicturesScrolling : MonoBehaviour
     // Download texture from Google Drive
     private void DownloadTexture(string id)
     {
-        isDownloadind = true;
+        isDownloadind = 1;
         requestTexture = GoogleDriveFiles.DownloadTexture(id, true);
         requestTexture.Send().OnDone += RenderImage;
     }
@@ -154,7 +146,7 @@ public class PicturesScrolling : MonoBehaviour
         var texture = textureFile.Texture;
         var rect = new Rect(0, 0, texture.width, texture.height);
         Store.vrPicture = Sprite.Create(texture, rect, Vector2.one * .5f);
-        isDownloadind = false;
+        isDownloadind = 2;
         //StartClick();
     }
 
@@ -166,6 +158,7 @@ public class PicturesScrolling : MonoBehaviour
 
     public void BackClick()
     {
+        Store.vrPicture = null;
         SceneManager.LoadScene("Menu");
     }
 }
