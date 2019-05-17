@@ -18,6 +18,7 @@ public class PicturesScrolling : MonoBehaviour
     [Header("Loading circle")]
     public GameObject loadingWindow;
     public RectTransform loadingTransform;
+    public GameObject loadingText;
     private float rotateSpeed = -100f;
 
     [Header ("Google Drive API")]
@@ -41,11 +42,13 @@ public class PicturesScrolling : MonoBehaviour
         if (isDownloadind == 1)
         {
             loadingWindow.gameObject.SetActive(true);
+            loadingText.GetComponent<Text>().text = string.Format("{0:P2}", requestTexture.Progress);
             loadingTransform.Rotate(0f, 0f, rotateSpeed * Time.deltaTime);
         }
         if (isDownloadind == 2)
         {
             //loadingWindow.gameObject.SetActive(false);
+            loadingText.SetActive(false);
             loadingWindow.transform.Find("LoadingCircle").transform.gameObject.SetActive(false);
             loadingWindow.transform.Find("StartButton").transform.gameObject.SetActive(true);
         }
@@ -80,13 +83,11 @@ public class PicturesScrolling : MonoBehaviour
     private async void InitializePanView(GameObject viewPrefab, UnityGoogleDrive.Data.File file)
     {
         TestItemView view = new TestItemView(viewPrefab.transform);
-        view.titleText.text = file.Name;
+        view.titleText.text = file.Name.Remove(file.Name.IndexOf('.'));
         view.imageThumbnail.sprite = await DownloadThumbnail(file.ThumbnailLink);
         view.downloadButton.GetComponent<Button>().onClick.AddListener(
             () =>
             {
-                //view.downloadButton.transform.gameObject.SetActive(false);
-                //view.progressBar.transform.gameObject.SetActive(true);
                 DownloadTexture(file.Id);
             }
         );
