@@ -10,8 +10,9 @@ public class ControlScript : MonoBehaviour
     public int visitorSpeed;
 
     private bool isMoving = false;
-    private bool moveForward = true;
     private bool isPaused = false;
+    private bool isPauseIn = false;
+    private bool returnIn = false;
 
     // Start is called before the first frame update
     void Start()
@@ -22,23 +23,32 @@ public class ControlScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
-        if (isMoving)
+        float hAxis = Input.GetAxis("Horizontal");
+        float vAxis = Input.GetAxis("Vertical");
+
+
+        if (!isPaused)
         {
-            if (moveForward)
-            {
-                transform.position = transform.position + Camera.main.transform.forward * visitorSpeed * Time.deltaTime;
-            }
-            if (!moveForward)
-            {
-                transform.position = transform.position - Camera.main.transform.forward * visitorSpeed * Time.deltaTime;
-            }
+            Vector3 movement = Camera.main.transform.TransformDirection(new Vector3(hAxis, 0, vAxis) * visitorSpeed * Time.deltaTime);
+            transform.position = transform.position + movement;
         }
-        */
+
+        if (Input.GetButtonDown("Submit") && (isPauseIn))
+        {
+            PauseClick();
+        }
+
+        if (Input.GetButtonDown("Submit") && (returnIn))
+        {
+            ReturnToMenuClick();
+        }
+
+        /*
         if (Input.GetButton("Fire1") && (!isPaused))
         {
             transform.position = transform.position + Camera.main.transform.forward * visitorSpeed * Time.deltaTime;
         }
+        */
     }
 
     public void PauseClick ()
@@ -55,33 +65,29 @@ public class ControlScript : MonoBehaviour
         }
     }
 
+    public void PauseIn ()
+    {
+        isPauseIn = true;
+    }
+
+    public void PauseOut ()
+    {
+        isPauseIn = false;
+    }
+
+    public void ReturnIn()
+    {
+        returnIn = true;
+    }
+
+    public void ReturnOut()
+    {
+        returnIn = false;
+    }
+
     public void ReturnToMenuClick ()
     {
         Store.vrPicture = null;
         SceneManager.LoadScene("Menu");
     }
-
-    /*
-    public void MoveForwardUp ()
-    {
-        isMoving = false;
-    }
-
-    public void MoveForwardDown ()
-    {
-        isMoving = true;
-        moveForward = true;
-    }
-
-    public void MoveBackwardUp ()
-    {
-        isMoving = false;
-    }
-
-    public void MoveBackwardDown ()
-    {
-        isMoving = true;
-        moveForward = false;
-    }
-    */
 }
