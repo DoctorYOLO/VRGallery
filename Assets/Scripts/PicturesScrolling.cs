@@ -7,9 +7,12 @@ using UnityEngine.Networking;
 using UnityEngine.XR;
 using UnityEngine.UI;
 using UnityEngine;
+using System.IO;
+using System.Linq;
 
 public class PicturesScrolling : MonoBehaviour
 {
+    public static Sprite vrPicture;
     [Header("Prefab for pan in scroll view")]
     public RectTransform panPrefab;
     [Header("Container for pans in scroll view")]
@@ -38,6 +41,13 @@ public class PicturesScrolling : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isDownloadind == 0)
+        {
+            loadingWindow.gameObject.SetActive(false);
+            loadingText.SetActive(true);
+            loadingWindow.transform.Find("LoadingCircle").transform.gameObject.SetActive(true);
+            loadingWindow.transform.Find("SaveButton").transform.gameObject.SetActive(false);
+        }
         if (isDownloadind == 1)
         {
             loadingWindow.gameObject.SetActive(true);
@@ -46,10 +56,9 @@ public class PicturesScrolling : MonoBehaviour
         }
         if (isDownloadind == 2)
         {
-            //loadingWindow.gameObject.SetActive(false);
             loadingText.SetActive(false);
             loadingWindow.transform.Find("LoadingCircle").transform.gameObject.SetActive(false);
-            loadingWindow.transform.Find("StartButton").transform.gameObject.SetActive(true);
+            loadingWindow.transform.Find("SaveButton").transform.gameObject.SetActive(true);
         }
     }
 
@@ -70,6 +79,10 @@ public class PicturesScrolling : MonoBehaviour
     // Drawing list from Google Drive in menu UI
     private void BuildResults (UnityGoogleDrive.Data.FileList fileList)
     {
+        foreach (Transform child in content)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
         foreach (var file in fileList.Files)
         {
             var instance = GameObject.Instantiate(panPrefab.gameObject) as GameObject;
@@ -145,20 +158,19 @@ public class PicturesScrolling : MonoBehaviour
     {
         var texture = textureFile.Texture;
         var rect = new Rect(0, 0, texture.width, texture.height);
-        Store.vrPicture = Sprite.Create(texture, rect, Vector2.one * .5f);
+        vrPicture = Sprite.Create(texture, rect, Vector2.one * .5f);
+        vrPicture.name = textureFile.Id;
         isDownloadind = 2;
-        //StartClick();
     }
 
-    public void StartClick()
+    public void SaveClick()
     {
-        XRSettings.enabled = true;
-        SceneManager.LoadScene("VR");
+        isDownloadind = 0;
+        ListFiles();
     }
 
     public void BackClick()
     {
-        Store.vrPicture = null;
         SceneManager.LoadScene("Menu");
     }
 }

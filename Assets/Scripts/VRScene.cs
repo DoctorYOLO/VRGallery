@@ -9,7 +9,7 @@ public class VRScene : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        spawnPoint.GetComponent<SpriteRenderer>().sprite = Store.vrPicture;
+        //spawnPoint.GetComponent<SpriteRenderer>().sprite = Store.vrPicture;
     }
 
     // Update is called once per frame

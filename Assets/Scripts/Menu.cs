@@ -14,7 +14,7 @@ public class Menu : MonoBehaviour
 
     [Header("Settings screen")]
     public GameObject IdField;
-    private string folderId = "1-NymqviIpcoKleDdG1OPkadwhAwCPZhn";
+    public string folderId = "1-NymqviIpcoKleDdG1OPkadwhAwCPZhn";
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +38,12 @@ public class Menu : MonoBehaviour
     }
 
     public void PlayClick()
+    {
+        XRSettings.enabled = true;
+        SceneManager.LoadScene("VR");
+    }
+
+    public void ChoosePictureClick()
     {
         MainMenu.gameObject.SetActive(false);
         Gallery.gameObject.SetActive(true);

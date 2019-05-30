@@ -9,7 +9,6 @@ public class ControlScript : MonoBehaviour
     public GameObject Menu;
     public int visitorSpeed;
 
-    private bool isMoving = false;
     private bool isPaused = false;
     private bool isPauseIn = false;
     private bool returnIn = false;
@@ -87,7 +86,6 @@ public class ControlScript : MonoBehaviour
 
     public void ReturnToMenuClick ()
     {
-        Store.vrPicture = null;
         SceneManager.LoadScene("Menu");
     }
 }
