@@ -12,7 +12,6 @@ using System.Linq;
 
 public class PicturesScrolling : MonoBehaviour
 {
-    public static Sprite vrPicture;
     [Header("Prefab for pan in scroll view")]
     public RectTransform panPrefab;
     [Header("Container for pans in scroll view")]
@@ -31,6 +30,11 @@ public class PicturesScrolling : MonoBehaviour
     private GoogleDriveFiles.ListRequest request;
     private string query = string.Empty;
     private int isDownloadind = 0;
+
+    [Header("Save/Load")]
+    public static Sprite vrPicture;
+    //---------------------------------------------------------------------TODO--------------------------------------------------
+    private string tempName;
 
     // Start is called before the first frame update
     void Start()
@@ -100,6 +104,7 @@ public class PicturesScrolling : MonoBehaviour
         view.downloadButton.GetComponent<Button>().onClick.AddListener(
             () =>
             {
+                tempName = file.Name.Remove(file.Name.IndexOf('.'));
                 DownloadTexture(file.Id);
             }
         );
@@ -159,7 +164,7 @@ public class PicturesScrolling : MonoBehaviour
         var texture = textureFile.Texture;
         var rect = new Rect(0, 0, texture.width, texture.height);
         vrPicture = Sprite.Create(texture, rect, Vector2.one * .5f);
-        vrPicture.name = textureFile.Id;
+        vrPicture.name = tempName;
         isDownloadind = 2;
     }
 

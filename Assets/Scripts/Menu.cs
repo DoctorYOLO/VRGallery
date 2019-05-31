@@ -40,7 +40,7 @@ public class Menu : MonoBehaviour
     public void PlayClick()
     {
         XRSettings.enabled = true;
-        SceneManager.LoadScene("VR");
+        SceneManager.LoadScene("Gallery");
     }
 
     public void ChoosePictureClick()
