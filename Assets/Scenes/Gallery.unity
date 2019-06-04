@@ -267,7 +267,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -502.3, y: -231.39}
-  m_SizeDelta: {x: 9, y: 5}
+  m_SizeDelta: {x: 8, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &61134904
 MonoBehaviour:
@@ -768,6 +768,7 @@ GameObject:
   - component: {fileID: 883724084}
   - component: {fileID: 883724083}
   - component: {fileID: 883724082}
+  - component: {fileID: 883724086}
   m_Layer: 5
   m_Name: WallCanvas
   m_TagString: Untagged
@@ -855,8 +856,24 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 506, y: 234.5}
-  m_SizeDelta: {x: 1012, y: 469}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &883724086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 883724081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7b953a6d7e5a2848b5f0ce0423e82e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPoints:
+  - {fileID: 61134902}
+  - {fileID: 1371798618}
+  - {fileID: 1761223335}
 --- !u!1001 &935050865
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1905,7 +1922,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -502.37, y: -231.39}
-  m_SizeDelta: {x: 9, y: 5}
+  m_SizeDelta: {x: 8, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1761223337
 MonoBehaviour:

@@ -23,7 +23,6 @@ public class SaveLoad : MonoBehaviour
         saver.bytes = ImageConversion.EncodeToPNG(tex);
         string text = JsonConvert.SerializeObject(saver);
         File.WriteAllText(Application.persistentDataPath + "/" + PicturesScrolling.vrPicture.name + ".json", text);
-        Debug.Log(Application.persistentDataPath + "/" + PicturesScrolling.vrPicture.name + ".json");
     }
 
     // Load all sprites from memory
@@ -38,7 +37,8 @@ public class SaveLoad : MonoBehaviour
             Texture2D tex = new Texture2D(loader.x, loader.y);
             ImageConversion.LoadImage(tex, loader.bytes);
             Sprite mySprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), Vector2.one);
-            GetComponent<Image>().sprite = mySprite;
+            mySprite.name = files[i].Name.Remove(files[i].Name.IndexOf('.'));
+            Store.spritesList.Add(mySprite);
         }
     }
 
