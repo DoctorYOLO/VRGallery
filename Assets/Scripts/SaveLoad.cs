@@ -13,7 +13,7 @@ public class SaveLoad : MonoBehaviour
     SaveManager saver = new SaveManager();
     SaveManager loader = new SaveManager();
 
-    // Save the sprite into files
+    // Save the sprite into .json file
     public void Save ()
     {
         BinaryFormatter binary = new BinaryFormatter();
@@ -26,7 +26,7 @@ public class SaveLoad : MonoBehaviour
     }
 
     // Load all sprites from memory
-    public void Load ()
+    public void LoadAll ()
     {
         DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath + "/");
         var files = di.GetFiles().Where(o => o.Name.EndsWith(".json")).ToArray();
@@ -40,6 +40,18 @@ public class SaveLoad : MonoBehaviour
             mySprite.name = files[i].Name.Remove(files[i].Name.IndexOf('.'));
             Store.spritesList.Add(mySprite);
         }
+    }
+
+    // Load sprite by name from memory
+    public Sprite Load (string fileName)
+    {
+        string text = File.ReadAllText(Application.persistentDataPath + "/" + fileName);
+        loader = JsonConvert.DeserializeObject<SaveManager>(text);
+        Texture2D tex = new Texture2D(loader.x, loader.y);
+        ImageConversion.LoadImage(tex, loader.bytes);
+        Sprite mySprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), Vector2.one);
+        mySprite.name = fileName.Remove(fileName.IndexOf('.'));
+        return mySprite;
     }
 
     // Duplicate texture to enable read/write option

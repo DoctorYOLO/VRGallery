@@ -41,13 +41,6 @@ public class ControlScript : MonoBehaviour
         {
             ReturnToMenuClick();
         }
-
-        /*
-        if (Input.GetButton("Fire1") && (!isPaused))
-        {
-            transform.position = transform.position + Camera.main.transform.forward * visitorSpeed * Time.deltaTime;
-        }
-        */
     }
 
     public void PauseClick ()

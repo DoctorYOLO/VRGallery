@@ -27,8 +27,6 @@ public class PicturesScrolling : MonoBehaviour
     [Range(1, 1000)]
     public int ResultsPerPage = 100;
     private GoogleDriveFiles.DownloadTextureRequest requestTexture;
-    private GoogleDriveFiles.ListRequest request;
-    private string query = string.Empty;
     private int isDownloadind = 0;
 
     [Header("Save/Load")]
@@ -67,27 +65,21 @@ public class PicturesScrolling : MonoBehaviour
     }
 
     // Request list of files from Google Drive
-    private void ListFiles (string nextPageToken = null)
+    private async void ListFiles(string nextPageToken = null)
     {
-        request = GoogleDriveFiles.List();
-        request.Fields = new List<string> { "nextPageToken, files(id, name, thumbnailLink)" };
-        request.PageSize = ResultsPerPage;
-        request.Q = "mimeType contains 'image' and '" + Store.folderId + "' in parents";
-        if (!string.IsNullOrEmpty(query))
-            request.Q = string.Format("name contains '{0}'", query);
-        if (!string.IsNullOrEmpty(nextPageToken))
-            request.PageToken = nextPageToken;
-        request.Send().OnDone += BuildResults;
+        var files = await Helpers.FindFilesByPathAsync(Store.folderName + "/", fields: new List<string> { "files(id, name, thumbnailLink)" });
+        BuildResult(files);
     }
 
+
     // Drawing list from Google Drive in menu UI
-    private void BuildResults (UnityGoogleDrive.Data.FileList fileList)
+    private void BuildResult(List<UnityGoogleDrive.Data.File> fileList)
     {
         foreach (Transform child in content)
         {
             GameObject.Destroy(child.gameObject);
         }
-        foreach (var file in fileList.Files)
+        foreach (var file in fileList)
         {
             var instance = GameObject.Instantiate(panPrefab.gameObject) as GameObject;
             instance.transform.SetParent(content, false);
@@ -124,13 +116,6 @@ public class PicturesScrolling : MonoBehaviour
             imageThumbnail = rootView.Find("Thumbnail").GetComponent<Image>();
             downloadButton = rootView.Find("DownloadButton");
         }
-    }
-
-    private bool NextPageExists ()
-    {
-        return request != null && 
-            request.ResponseData != null && 
-            !string.IsNullOrEmpty(request.ResponseData.NextPageToken);
     }
 
     // Download thumbnail from URL

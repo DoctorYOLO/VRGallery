@@ -14,20 +14,20 @@ public class Menu : MonoBehaviour
 
     [Header("Settings screen")]
     public GameObject IdField;
-    public string folderId = "1-NymqviIpcoKleDdG1OPkadwhAwCPZhn";
+    public string folderName = "Pictures";
 
     // Start is called before the first frame update
     void Start()
     {
         XRSettings.enabled = false;
-        if (Store.folderId == null)
+        if (Store.folderName == null)
         {
-            IdField.GetComponentInChildren<InputField>().text = folderId;
-            Store.folderId = folderId;
+            IdField.GetComponentInChildren<InputField>().text = folderName;
+            Store.folderName = folderName;
         }
         else
         {
-            IdField.GetComponentInChildren<InputField>().text = Store.folderId;
+            IdField.GetComponentInChildren<InputField>().text = Store.folderName;
         }
     }
 
@@ -62,7 +62,7 @@ public class Menu : MonoBehaviour
 
     public void SaveClick()
     {
-        Store.folderId = IdField.GetComponentInChildren<InputField>().text;
+        Store.folderName = IdField.GetComponentInChildren<InputField>().text;
         MainMenu.gameObject.SetActive(true);
         Settings.gameObject.SetActive(false);
     }
