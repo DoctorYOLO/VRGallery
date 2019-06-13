@@ -17,10 +17,11 @@ public class SaveLoad : MonoBehaviour
     public void Save ()
     {
         BinaryFormatter binary = new BinaryFormatter();
-        Texture2D tex = DuplicateTexture(PicturesScrolling.vrPicture.texture);
+        Texture2D tex = DuplicateTexture(PicturesScrolling.vrPicture);
         saver.x = tex.width;
         saver.y = tex.height;
         saver.bytes = ImageConversion.EncodeToPNG(tex);
+        Destroy(tex);
         string text = JsonConvert.SerializeObject(saver);
         File.WriteAllText(Application.persistentDataPath + "/" + PicturesScrolling.vrPicture.name + ".json", text);
     }

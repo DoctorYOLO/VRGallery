@@ -2,21 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.XR;
+using System.IO;
+using System.Linq;
+using UnityEngine.UI;
 
 public class ControlScript : MonoBehaviour
 {
+    [Header("Wall Pictures")]
+    public GameObject[] spawnPoints;
+    public GameObject saveManager;
 
-    public GameObject Menu;
+    [Header("UI")]
+    public GameObject menu;
     public int visitorSpeed;
 
     private bool isPaused = false;
     private bool isPauseIn = false;
-    private bool returnIn = false;
+    private bool isReturnIn = false;
+    private bool isNextIn = false;
+    private bool isBackIn = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        XRSettings.enabled = true;
+        PicturesDisplay();
     }
 
     // Update is called once per frame
@@ -37,23 +48,52 @@ public class ControlScript : MonoBehaviour
             PauseClick();
         }
 
-        if (Input.GetButtonDown("Submit") && (returnIn))
+        if (Input.GetButtonDown("Submit") && (isReturnIn))
         {
             ReturnToMenuClick();
         }
+
+        if (Input.GetButtonDown("Submit") && (isNextIn))
+        {
+            NextClick();
+        }
+
+        if (Input.GetButtonDown("Submit") && (isBackIn))
+        {
+            BackClick();
+        }
+    }
+
+    public void PicturesDisplay ()
+    {
+        DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath + "/");
+        var files = di.GetFiles().Where(o => o.Name.EndsWith(".json")).ToArray();
+        spawnPoints[0].GetComponent<Image>().sprite = saveManager.GetComponent<SaveLoad>().Load(files[0].Name);
+        spawnPoints[1].GetComponent<Image>().sprite = saveManager.GetComponent<SaveLoad>().Load(files[1].Name);
+        spawnPoints[2].GetComponent<Image>().sprite = saveManager.GetComponent<SaveLoad>().Load(files[2].Name);
+    }
+
+    public void NextClick ()
+    {
+
+    }
+
+    public void BackClick ()
+    {
+
     }
 
     public void PauseClick ()
     {
         if (isPaused)
         {
-            Menu.gameObject.SetActive(false);
+            menu.gameObject.SetActive(false);
             isPaused = false;
         }
         else
         {
             isPaused = true;
-            Menu.gameObject.SetActive(true);
+            menu.gameObject.SetActive(true);
         }
     }
 
@@ -69,15 +109,35 @@ public class ControlScript : MonoBehaviour
 
     public void ReturnIn()
     {
-        returnIn = true;
+        isReturnIn = true;
     }
 
     public void ReturnOut()
     {
-        returnIn = false;
+        isReturnIn = false;
     }
 
-    public void ReturnToMenuClick ()
+    public void NextIn()
+    {
+        isNextIn = true;
+    }
+
+    public void NextOut()
+    {
+        isNextIn = false;
+    }
+
+    public void BackIn()
+    {
+        isBackIn = true;
+    }
+
+    public void BackOut()
+    {
+        isBackIn = false;
+    }
+
+    public void ReturnToMenuClick()
     {
         SceneManager.LoadScene("Menu");
     }

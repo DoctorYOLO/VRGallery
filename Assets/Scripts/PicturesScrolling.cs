@@ -19,9 +19,8 @@ public class PicturesScrolling : MonoBehaviour
 
     [Header("Loading circle")]
     public GameObject loadingWindow;
-    public RectTransform loadingTransform;
+    public GameObject loadingTransform;
     public GameObject loadingText;
-    private float rotateSpeed = -100f;
 
     [Header ("Google Drive API")]
     [Range(1, 1000)]
@@ -30,7 +29,7 @@ public class PicturesScrolling : MonoBehaviour
     private int isDownloadind = 0;
 
     [Header("Save/Load")]
-    public static Sprite vrPicture;
+    public static Texture2D vrPicture;
     //---------------------------------------------------------------------TODO--------------------------------------------------
     private string tempName;
 
@@ -53,8 +52,9 @@ public class PicturesScrolling : MonoBehaviour
         if (isDownloadind == 1)
         {
             loadingWindow.gameObject.SetActive(true);
-            loadingText.GetComponent<Text>().text = string.Format("{0:P2}", requestTexture.Progress);
-            loadingTransform.Rotate(0f, 0f, rotateSpeed * Time.deltaTime);
+            loadingText.GetComponent<Text>().text = string.Format("{0:P0}", requestTexture.Progress);
+            float progress = Mathf.Clamp01(requestTexture.Progress / .9f);
+            loadingTransform.GetComponent<Image>().fillAmount = progress;
         }
         if (isDownloadind == 2)
         {
@@ -146,9 +146,7 @@ public class PicturesScrolling : MonoBehaviour
     // Render texture from Google Drive
     private void RenderImage(UnityGoogleDrive.Data.TextureFile textureFile)
     {
-        var texture = textureFile.Texture;
-        var rect = new Rect(0, 0, texture.width, texture.height);
-        vrPicture = Sprite.Create(texture, rect, Vector2.one * .5f);
+        vrPicture = textureFile.Texture;
         vrPicture.name = tempName;
         isDownloadind = 2;
     }
@@ -156,7 +154,7 @@ public class PicturesScrolling : MonoBehaviour
     public void SaveClick()
     {
         isDownloadind = 0;
-        ListFiles();
+        //ListFiles();
     }
 
     public void BackClick()

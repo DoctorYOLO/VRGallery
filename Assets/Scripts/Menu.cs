@@ -16,6 +16,7 @@ public class Menu : MonoBehaviour
     public GameObject IdField;
     public string folderName = "Pictures";
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +40,6 @@ public class Menu : MonoBehaviour
 
     public void PlayClick()
     {
-        XRSettings.enabled = true;
         SceneManager.LoadScene("Gallery");
     }
 
