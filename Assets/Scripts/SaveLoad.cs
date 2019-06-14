@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class SaveLoad : MonoBehaviour
 {
@@ -44,17 +45,17 @@ public class SaveLoad : MonoBehaviour
     }
 
     // Load sprite by name from memory
-    public Sprite Load (string fileName)
+    public async Task<Sprite> Load (string fileName)
     {
         string text = File.ReadAllText(Application.persistentDataPath + "/" + fileName);
-        loader = JsonConvert.DeserializeObject<SaveManager>(text);
+        loader = await Task.Run( () => JsonConvert.DeserializeObject<SaveManager>(text));
         Texture2D tex = new Texture2D(loader.x, loader.y);
         ImageConversion.LoadImage(tex, loader.bytes);
         Sprite mySprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), Vector2.one);
         mySprite.name = fileName.Remove(fileName.IndexOf('.'));
         return mySprite;
     }
-
+    
     // Duplicate texture to enable read/write option
     Texture2D DuplicateTexture(Texture2D source)
     {

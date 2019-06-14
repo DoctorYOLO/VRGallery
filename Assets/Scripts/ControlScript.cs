@@ -6,6 +6,7 @@ using UnityEngine.XR;
 using System.IO;
 using System.Linq;
 using UnityEngine.UI;
+using DoubleLinkedList;
 
 public class ControlScript : MonoBehaviour
 {
@@ -23,11 +24,18 @@ public class ControlScript : MonoBehaviour
     private bool isNextIn = false;
     private bool isBackIn = false;
 
+    private static DLOperator dlOperator;
+    private static FileInfo[] files;
+
     // Start is called before the first frame update
     void Start()
     {
         XRSettings.enabled = true;
-        PicturesDisplay();
+        DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath + "/");
+        files = di.GetFiles().Where(o => o.Name.EndsWith(".json")).ToArray();
+
+        dlOperator = new DLOperator(files.Length, 2);
+        PicturesDisplay(new int[] { 0, 1, 2 });
     }
 
     // Update is called once per frame
@@ -64,23 +72,23 @@ public class ControlScript : MonoBehaviour
         }
     }
 
-    public void PicturesDisplay ()
+    public async void PicturesDisplay (int[] arr)
     {
-        DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath + "/");
-        var files = di.GetFiles().Where(o => o.Name.EndsWith(".json")).ToArray();
-        spawnPoints[0].GetComponent<Image>().sprite = saveManager.GetComponent<SaveLoad>().Load(files[0].Name);
-        spawnPoints[1].GetComponent<Image>().sprite = saveManager.GetComponent<SaveLoad>().Load(files[1].Name);
-        spawnPoints[2].GetComponent<Image>().sprite = saveManager.GetComponent<SaveLoad>().Load(files[2].Name);
+        spawnPoints[0].GetComponent<Image>().sprite = await saveManager.GetComponent<SaveLoad>().Load(files[arr[0]].Name);
+        spawnPoints[1].GetComponent<Image>().sprite = await saveManager.GetComponent<SaveLoad>().Load(files[arr[1]].Name);
+        spawnPoints[2].GetComponent<Image>().sprite = await saveManager.GetComponent<SaveLoad>().Load(files[arr[2]].Name);
     }
 
     public void NextClick ()
     {
-
+        int[] arr = dlOperator.pickNext();
+        PicturesDisplay(arr);
     }
 
     public void BackClick ()
     {
-
+        int[] arr = dlOperator.pickPrevious();
+        PicturesDisplay(arr);
     }
 
     public void PauseClick ()
