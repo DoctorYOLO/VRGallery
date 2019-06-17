@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 8b72052ba35db8844a311f93bfc9cc6e
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Fira Sans ExtraBold
+  fontNames:
+  - Fira Sans ExtraBold
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 70ec3b68fd0c96f42bfe2e56389c1600, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

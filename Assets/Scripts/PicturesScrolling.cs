@@ -75,24 +75,48 @@ public class PicturesScrolling : MonoBehaviour
     // Drawing list from Google Drive in menu UI
     private void BuildResult(List<UnityGoogleDrive.Data.File> fileList)
     {
+        DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath + "/");
+        var files = di.GetFiles().Where(o => o.Name.EndsWith(".json")).ToArray();
+        bool isDownloaded = false;
         foreach (Transform child in content)
         {
             GameObject.Destroy(child.gameObject);
         }
         foreach (var file in fileList)
         {
-            var instance = GameObject.Instantiate(panPrefab.gameObject) as GameObject;
-            instance.transform.SetParent(content, false);
-            InitializePanView(instance, file);
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].Name.Remove(files[i].Name.IndexOf('.')) == file.Name.Remove(file.Name.IndexOf('.')))
+                {
+                    isDownloaded = true;
+                }
+            }
+            if (isDownloaded)
+            {
+                var instance = GameObject.Instantiate(panPrefab.gameObject) as GameObject;
+                instance.transform.SetParent(content, false);
+                InitializePanView(instance, file, true);
+            }
+            else
+            {
+                var instance = GameObject.Instantiate(panPrefab.gameObject) as GameObject;
+                instance.transform.SetParent(content, false);
+                InitializePanView(instance, file, false);
+            }
+            isDownloaded = false;
         }
     }
 
     // Write data using TestItemView
-    private async void InitializePanView(GameObject viewPrefab, UnityGoogleDrive.Data.File file)
+    private async void InitializePanView(GameObject viewPrefab, UnityGoogleDrive.Data.File file, bool isDownloaded)
     {
         TestItemView view = new TestItemView(viewPrefab.transform);
         view.titleText.text = file.Name.Remove(file.Name.IndexOf('.'));
         view.imageThumbnail.sprite = await DownloadThumbnail(file.ThumbnailLink);
+        if (isDownloaded)
+        {
+            view.downloadButton.gameObject.SetActive(false);
+        }
         view.downloadButton.GetComponent<Button>().onClick.AddListener(
             () =>
             {
@@ -151,10 +175,15 @@ public class PicturesScrolling : MonoBehaviour
         isDownloadind = 2;
     }
 
-    public void SaveClick()
+    public void SaveClick ()
     {
+        ListFiles();
         isDownloadind = 0;
-        //ListFiles();
+    }
+
+    public void RefreshClick ()
+    {
+        ListFiles();
     }
 
     public void BackClick()

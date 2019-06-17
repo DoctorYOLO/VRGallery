@@ -74,21 +74,39 @@ public class ControlScript : MonoBehaviour
 
     public async void PicturesDisplay (int[] arr)
     {
-        spawnPoints[0].GetComponent<Image>().sprite = await saveManager.GetComponent<SaveLoad>().Load(files[arr[0]].Name);
-        spawnPoints[1].GetComponent<Image>().sprite = await saveManager.GetComponent<SaveLoad>().Load(files[arr[1]].Name);
-        spawnPoints[2].GetComponent<Image>().sprite = await saveManager.GetComponent<SaveLoad>().Load(files[arr[2]].Name);
+        if (files.Length == 1)
+        {
+            spawnPoints[1].GetComponent<Image>().sprite = await saveManager.GetComponent<SaveLoad>().Load(files[arr[0]].Name);
+        }
+        if (files.Length == 2)
+        {
+            spawnPoints[0].GetComponent<Image>().sprite = await saveManager.GetComponent<SaveLoad>().Load(files[arr[0]].Name);
+            spawnPoints[1].GetComponent<Image>().sprite = await saveManager.GetComponent<SaveLoad>().Load(files[arr[1]].Name);
+        }
+        if (files.Length >= 3)
+        {
+            spawnPoints[0].GetComponent<Image>().sprite = await saveManager.GetComponent<SaveLoad>().Load(files[arr[0]].Name);
+            spawnPoints[1].GetComponent<Image>().sprite = await saveManager.GetComponent<SaveLoad>().Load(files[arr[1]].Name);
+            spawnPoints[2].GetComponent<Image>().sprite = await saveManager.GetComponent<SaveLoad>().Load(files[arr[2]].Name);
+        }
     }
 
     public void NextClick ()
     {
-        int[] arr = dlOperator.pickNext();
-        PicturesDisplay(arr);
+        if (files.Length > 3)
+        {
+            int[] arr = dlOperator.PickNext();
+            PicturesDisplay(arr);
+        }
     }
 
     public void BackClick ()
     {
-        int[] arr = dlOperator.pickPrevious();
-        PicturesDisplay(arr);
+        if (files.Length > 3)
+        {
+            int[] arr = dlOperator.PickPrevious();
+            PicturesDisplay(arr);
+        }
     }
 
     public void PauseClick ()

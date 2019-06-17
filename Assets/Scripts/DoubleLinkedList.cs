@@ -178,8 +178,8 @@ namespace DoubleLinkedList
         private static int filesAmount;
         private static int step;
 
-        private static bool nextNeedToRebuild = false;
-        private static bool prevNeedToRebuild = false;
+        private static bool nextNeedToRebuild = true;
+        private static bool prevNeedToRebuild = true;
 
         private static DoublyLinkedList<int> linkedList = new DoublyLinkedList<int>();
 
@@ -194,7 +194,7 @@ namespace DoubleLinkedList
             }
         }
 
-        public int[] pickNext()
+        public int[] PickNext()
         {
             List<int> elsList = new List<int>();
             DoublyNode<int> el = new DoublyNode<int>();
@@ -204,7 +204,7 @@ namespace DoubleLinkedList
                 for (int i = 0; i < step; i++)
                 {
                     el = linkedList.PeekFront();
-                    moveUp(el);
+                    MoveUp(el);
                 }
             }
 
@@ -214,7 +214,7 @@ namespace DoubleLinkedList
             for (int i = 0; i < step; i++)
             {
                 el = linkedList.PeekFront();
-                moveUp(el);
+                MoveUp(el);
                 elsList.Add(el.Data);
             }
 
@@ -227,7 +227,7 @@ namespace DoubleLinkedList
             return elsList.ToArray();
         }
 
-        public int[] pickPrevious()
+        public int[] PickPrevious()
         {
             List<int> elsList = new List<int>();
             DoublyNode<int> el = new DoublyNode<int>();
@@ -237,7 +237,7 @@ namespace DoubleLinkedList
                 for (int i = 0; i < step; i++)
                 {
                     el = linkedList.PeekBack();
-                    moveDown(el);
+                    MoveDown(el);
                 }
             }
 
@@ -253,7 +253,7 @@ namespace DoubleLinkedList
             for (int i = 0; i < step; i++)
             {
                 el = linkedList.PeekBack();
-                moveDown(el);
+                MoveDown(el);
                 elsList.Add(el.Data);
             }
 
@@ -263,19 +263,19 @@ namespace DoubleLinkedList
             return elsArr;
         }
 
-        private void moveUp(DoublyNode<int> el)
+        private void MoveUp(DoublyNode<int> el)
         {
             linkedList.RemoveFront();
             linkedList.Add(el.Data);
         }
 
-        private void moveDown(DoublyNode<int> el)
+        private void MoveDown(DoublyNode<int> el)
         {
             linkedList.RemoveBack();
             linkedList.AddFront(el.Data);
         }
 
-        public void printList()
+        public void PrintList()
         {
             Console.WriteLine();
             Console.WriteLine("--------");
