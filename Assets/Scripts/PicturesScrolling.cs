@@ -30,7 +30,6 @@ public class PicturesScrolling : MonoBehaviour
 
     [Header("Save/Load")]
     public static Texture2D vrPicture;
-    //---------------------------------------------------------------------TODO--------------------------------------------------
     private string tempName;
 
     // Start is called before the first frame update
