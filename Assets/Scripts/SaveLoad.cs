@@ -26,24 +26,7 @@ public class SaveLoad : MonoBehaviour
         string text = JsonConvert.SerializeObject(saver);
         File.WriteAllText(Application.persistentDataPath + "/" + PicturesScrolling.vrPicture.name + ".json", text);
     }
-
-    // Load all sprites from memory
-    public void LoadAll ()
-    {
-        DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath + "/");
-        var files = di.GetFiles().Where(o => o.Name.EndsWith(".json")).ToArray();
-        for (int i = 0; i < files.Length; i++)
-        {
-            string text = File.ReadAllText(Application.persistentDataPath + "/" + files[i].Name);
-            loader = JsonConvert.DeserializeObject<SaveManager>(text);
-            Texture2D tex = new Texture2D(loader.x, loader.y);
-            ImageConversion.LoadImage(tex, loader.bytes);
-            Sprite mySprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), Vector2.one);
-            mySprite.name = files[i].Name.Remove(files[i].Name.IndexOf('.'));
-            Store.spritesList.Add(mySprite);
-        }
-    }
-
+    
     // Load sprite by name from memory
     public async Task<Sprite> Load (string fileName)
     {
